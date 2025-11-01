@@ -1,6 +1,6 @@
 {
   "name": "notelink",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "API documentation library for Bun using ElysiaJS",
   "type": "module",
   "main": "dist/index.js",
