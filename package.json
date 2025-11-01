@@ -1,0 +1,56 @@
+{
+  "name": "@notelink/bun",
+  "version": "0.1.1",
+  "description": "API documentation library for Bun using ElysiaJS",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "create-notelink": "./cli/create.ts"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "cli",
+    "template",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "bun build src/index.ts --outdir dist --target bun --format esm && bun run build:types",
+    "build:types": "tsc --declaration --emitDeclarationOnly --outDir dist",
+    "dev": "bun run --watch src/index.ts",
+    "test": "bun test",
+    "test:cli": "bun cli/create.ts test-app",
+    "clean:test": "rmdir /s /q test-app 2>nul || rm -rf test-app 2>/dev/null || true",
+    "prepublishOnly": "bun run build"
+  },
+  "keywords": [
+    "bun",
+    "elysia",
+    "api",
+    "documentation",
+    "swagger",
+    "openapi",
+    "notelink"
+  ],
+  "author": "",
+  "license": "MIT",
+  "peerDependencies": {
+    "elysia": "^1.4.13"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "elysia": "^1.4.13",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@elysiajs/jwt": "^1.4.0",
+    "@elysiajs/openapi": "^1.0.0"
+  }
+}

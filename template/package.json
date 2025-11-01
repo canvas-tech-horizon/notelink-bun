@@ -1,0 +1,19 @@
+{
+  "name": "{{project-name}}",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "start": "bun run src/index.ts",
+    "build": "bun build src/index.ts --outdir dist --target bun"
+  },
+  "dependencies": {
+    "@notelink/bun": "^0.1.1",
+    "elysia": "^1.4.13",
+    "@elysiajs/jwt": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.3.3"
+  }
+}

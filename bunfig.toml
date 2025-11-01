@@ -1,0 +1,7 @@
+[install]
+# Production dependencies only
+production = false
+
+[run]
+# Shell to use when running scripts
+shell = "bun"
