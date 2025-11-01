@@ -1,5 +1,5 @@
 {
-  "name": "@notelink/bun",
+  "name": "notelink",
   "version": "0.1.1",
   "description": "API documentation library for Bun using ElysiaJS",
   "type": "module",
@@ -41,6 +41,17 @@
   ],
   "author": "",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/canvas-tech-horizon/notelink-bun.git"
+  },
+  "bugs": {
+    "url": "https://github.com/canvas-tech-horizon/notelink-bun/issues"
+  },
+  "homepage": "https://github.com/canvas-tech-horizon/notelink-bun#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
     "elysia": "^1.4.13"
   },

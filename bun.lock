@@ -2,7 +2,7 @@
   "lockfileVersion": 1,
   "workspaces": {
     "": {
-      "name": "@notelink/bun",
+      "name": "notelink",
       "dependencies": {
         "@elysiajs/jwt": "^1.0.0",
         "@elysiajs/openapi": "^1.0.0",

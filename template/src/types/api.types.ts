@@ -1,3 +1,3 @@
-import type { ApiNote, Context } from "@notelink/bun";
+import type { ApiNote, Context } from "notelink";
 
 export type { ApiNote, Context };

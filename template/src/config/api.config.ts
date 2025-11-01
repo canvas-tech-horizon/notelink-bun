@@ -1,4 +1,4 @@
-import type { CustomMiddleware } from "@notelink/bun";
+import type { CustomMiddleware } from "notelink";
 import { 
   setupLoggingMiddleware, 
   setupRateLimitMiddleware, 

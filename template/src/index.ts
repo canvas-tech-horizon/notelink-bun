@@ -1,4 +1,4 @@
-import { newApiNote } from "@notelink/bun";
+import { newApiNote } from "notelink";
 import { apiConfig, getJwtSecret } from "@/config/api.config";
 import { registerAllRoutes } from "@/books/note.books";
 
