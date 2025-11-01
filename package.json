@@ -5,9 +5,6 @@
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "bin": {
-    "create-notelink": "./cli/create.ts"
-  },
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -16,8 +13,6 @@
   },
   "files": [
     "dist",
-    "cli",
-    "template",
     "README.md",
     "LICENSE"
   ],
@@ -26,8 +21,6 @@
     "build:types": "tsc --declaration --emitDeclarationOnly --outDir dist",
     "dev": "bun run --watch src/index.ts",
     "test": "bun test",
-    "test:cli": "bun cli/create.ts test-app",
-    "clean:test": "rmdir /s /q test-app 2>nul || rm -rf test-app 2>/dev/null || true",
     "prepublishOnly": "bun run build",
     "publish:local": "scripts\\publish.bat",
     "publish:check": "npm pack --dry-run"

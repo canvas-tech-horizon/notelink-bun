@@ -17,10 +17,15 @@ A powerful and easy-to-use library for creating well-documented REST APIs with B
 
 ### Quick Start - Create a New Project
 
-The fastest way to get started is to create a new project with the CLI:
+The fastest way to get started is to create a new project using create-notelink:
 
 ```bash
+# Using bunx (recommended)
+bunx create-notelink my-app
+
+# Or using bun create
 bun create notelink my-app
+
 cd my-app
 bun install
 bun dev
@@ -28,10 +33,12 @@ bun dev
 
 Your API will be running at `http://localhost:8080` with documentation at `http://localhost:8080/swagger`!
 
+> **Note:** The `create-notelink` CLI tool is now in a separate repository: [create-notelink](https://github.com/canvas-tech-horizon/create-notelink)
+
 ### Add to Existing Project
 
 ```bash
-bun add @notelink
+bun add notelink
 ```
 
 ## Custom Middleware
