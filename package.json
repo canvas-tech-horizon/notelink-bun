@@ -28,7 +28,9 @@
     "test": "bun test",
     "test:cli": "bun cli/create.ts test-app",
     "clean:test": "rmdir /s /q test-app 2>nul || rm -rf test-app 2>/dev/null || true",
-    "prepublishOnly": "bun run build"
+    "prepublishOnly": "bun run build",
+    "publish:local": "scripts\\publish.bat",
+    "publish:check": "npm pack --dry-run"
   },
   "keywords": [
     "bun",

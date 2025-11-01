@@ -1,0 +1,37 @@
+# Source files
+src/
+tsconfig.json
+bunfig.toml
+
+# Tests
+*.test.ts
+*.spec.ts
+__tests__/
+test/
+tests/
+
+# Development
+.github/
+.vscode/
+.git/
+.gitignore
+node_modules/
+
+# Build artifacts
+*.tgz
+test-app/
+
+# Documentation (keep README and LICENSE)
+PUBLISHING.md
+.github/NPM_PUBLISH.md
+
+# Environment
+.env
+.env.*
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+bun-debug.log*
