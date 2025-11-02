@@ -1,6 +1,6 @@
 # NoteLink - API Documentation Library for Bun & ElysiaJS
 
-A powerful and easy-to-use library for creating well-documented REST APIs with Bun and ElysiaJS. Automatically generate Swagger/OpenAPI documentation for your endpoints with type safety and JWT authentication support.
+A powerful and easy-to-use library for creating well-documented REST APIs with Bun and ElysiaJS. Automatically generate OpenAPI documentation for your endpoints with type safety and JWT authentication support.
 
 ## Features
 
@@ -31,7 +31,7 @@ bun install
 bun dev
 ```
 
-Your API will be running at `http://localhost:8080` with documentation at `http://localhost:8080/swagger`!
+Your API will be running at `http://localhost:8080` with documentation at `http://localhost:8080/doc-api`
 
 > **Note:** The `create-notelink` CLI tool is now in a separate repository: [create-notelink](https://github.com/canvas-tech-horizon/create-notelink)
 
@@ -41,44 +41,12 @@ Your API will be running at `http://localhost:8080` with documentation at `http:
 bun add notelink
 ```
 
-## Custom Middleware
-
-NoteLink now supports custom middleware! You can easily add your own middleware functions to extend functionality.
-
-### Quick Example
-
-```typescript
-import { newApiNote, type CustomMiddleware } from "notelink";
-import type { Elysia } from "elysia";
-
-// Create a custom middleware
-function loggingMiddleware(app: Elysia): void {
-  app.onBeforeHandle(({ request }) => {
-    console.log(`${request.method} ${new URL(request.url).pathname}`);
-  });
-}
-
-// Use it in your config
-const api = newApiNote({
-  title: "My API",
-  description: "API with custom middleware",
-  version: "1.0.0",
-  customMiddleware: [loggingMiddleware]
-});
-```
-
 ### Built-in Examples
 
 The library includes several ready-to-use middleware examples:
 - **Logging Middleware** - Log all requests and responses
 - **Rate Limiting** - Limit requests per IP address
 - **Request ID** - Track requests with unique IDs
-
-For complete documentation on creating and using custom middleware, see [CUSTOM-MIDDLEWARE.md](./CUSTOM-MIDDLEWARE.md).
-
-## Documentation
-
-- [Custom Middleware Guide](./CUSTOM-MIDDLEWARE.md) - Learn how to create and use custom middleware
 
 ## Contributing
 
@@ -92,10 +60,14 @@ MIT License - see LICENSE file for details
 
 Inspired by the Go notelink library for Fiber framework.
 
+Special thanks to:
+- [ElysiaJS](https://elysiajs.com/) - Fast and friendly Bun web framework
+- [Scalar](https://scalar.com/) - Beautiful API documentation
+
 ## Support
 
 For issues and questions, please open an issue on GitHub.
 
 ---
 
-**Built with ❤️ using Bun and ElysiaJS**
+**Built with ❤️ using Bun ElysiaJS and Scalar**

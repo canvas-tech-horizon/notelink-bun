@@ -33,7 +33,7 @@ export class ApiNote {
   private setupMiddleware() {
     setupJwtMiddleware(this.app, this.jwtSecret);
     setupCorsMiddleware(this.app);
-    
+
     // Apply custom middleware if provided
     if (this.config.customMiddleware && this.config.customMiddleware.length > 0) {
       for (const middleware of this.config.customMiddleware) {
@@ -106,7 +106,9 @@ export class ApiNote {
       | "post"
       | "put"
       | "delete"
-      | "patch";
+      | "patch"
+      | "options"
+      | "head";
 
     switch (methodLower) {
       case "get":
@@ -123,6 +125,12 @@ export class ApiNote {
         break;
       case "patch":
         this.app.patch(fullPath, handler);
+        break;
+      case "options":
+        this.app.options(fullPath, handler);
+        break;
+      case "head":
+        this.app.head(fullPath, handler);
         break;
     }
 
@@ -153,30 +161,35 @@ export class ApiNote {
 
     return new Promise((resolve, reject) => {
       try {
+        this.app.onError(({ code, error, request }) => {
+          console.error('[onError]', code, request.method, request.url, error)
+          const message = error instanceof Error ? error.message : String(error);
+          return new Response(JSON.stringify({ code, message }), { status: 400 })
+        });
         this.app.listen(listenPort, () => {
           console.log('🚀 Server is Running - Network Information');
           console.log('');
           console.log(`📡 Host:  http://${this.config.host}`);
-          
+
           // print ip addresses of the machine and ports (Wi-Fi and Ethernet only)
           const os = require("os");
           const networkInterfaces = os.networkInterfaces();
           const foundInterfaces: string[] = [];
-          
+
           for (const name of Object.keys(networkInterfaces)) {
             const nameLower = name.toLowerCase();
             // Only show Wi-Fi and Ethernet interfaces
-            if (nameLower.includes('wi-fi') || nameLower.includes('ethernet') || 
-                nameLower.includes('wifi') || nameLower.includes('eth')) {
+            if (nameLower.includes('wi-fi') || nameLower.includes('ethernet') ||
+              nameLower.includes('wifi') || nameLower.includes('eth')) {
               const ifaceList = networkInterfaces[name] || [];
               for (const iface of ifaceList) {
                 if (iface.family === 'IPv4' && !iface.internal) {
-                  foundInterfaces.push(`🌐 ${name+":".padEnd(1)} http://${iface.address}:${listenPort}`);
+                  foundInterfaces.push(`🌍 ${name + ":".padEnd(1)} http://${iface.address}:${listenPort}`);
                 }
               }
             }
           }
-          
+
           if (foundInterfaces.length > 0) {
             foundInterfaces.forEach(iface => console.log(iface));
           }

@@ -15,12 +15,7 @@ export function setupOpenAPI(app: Elysia, config: Config): void {
           description: config.description,
           version: config.version,
         },
-        servers: [
-          {
-            url: `http://${config.host}`,
-            description: "Development server",
-          },
-        ],
+        servers: [],
         tags: [],
       },
       scalar: {
