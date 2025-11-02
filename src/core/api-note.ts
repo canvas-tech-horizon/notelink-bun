@@ -257,25 +257,25 @@ export class ApiNote {
 
     switch (methodLower) {
       case "get":
-        this.app.get(fullPath, handler);
+        this.app.get(fullPath, handler,{detail: { hide: true } });
         break;
       case "post":
-        this.app.post(fullPath, handler);
+        this.app.post(fullPath, handler,{detail: { hide: true } });
         break;
       case "put":
-        this.app.put(fullPath, handler);
+        this.app.put(fullPath, handler,{detail: { hide: true } });
         break;
       case "delete":
-        this.app.delete(fullPath, handler);
+        this.app.delete(fullPath, handler,{detail: { hide: true } });
         break;
       case "patch":
-        this.app.patch(fullPath, handler);
+        this.app.patch(fullPath, handler,{detail: { hide: true } });
         break;
       case "options":
-        this.app.options(fullPath, handler);
+        this.app.options(fullPath, handler,{detail: { hide: true } });
         break;
       case "head":
-        this.app.head(fullPath, handler);
+        this.app.head(fullPath, handler,{detail: { hide: true } });
         break;
     }
 
