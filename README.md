@@ -1,4 +1,6 @@
 # NoteLink - API Documentation Library for Bun & ElysiaJS
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcanvas-tech-horizon%2Fnotelink-bun.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcanvas-tech-horizon%2Fnotelink-bun?ref=badge_shield)
+
 
 A powerful and easy-to-use library for creating well-documented REST APIs with Bun and ElysiaJS. Automatically generate OpenAPI documentation for your endpoints with type safety and JWT authentication support.
 
@@ -79,6 +81,9 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## License
 
 MIT License - see LICENSE file for details
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcanvas-tech-horizon%2Fnotelink-bun.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcanvas-tech-horizon%2Fnotelink-bun?ref=badge_large)
 
 ## Credits
 
