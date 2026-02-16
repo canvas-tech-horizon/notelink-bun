@@ -149,3 +149,9 @@ build/
 # Test
 test-results/
 playwright-report/
+
+examples/
+IMPLEMENTATION-SUMMARY.md
+ISO-IEC-25010-2023-COMPLIANCE.md
+MIGRATION-v0.3.0.md
+bun-documentation.json

@@ -9,8 +9,8 @@ import type { Config } from "../types/config.types";
  * and the Scalar documentation UI. It provides:
  * 
  * Features:
- * - Interactive API documentation at /doc-api
- * - JSON specification endpoint at /doc-api/json
+ * - Interactive API documentation at /api-docs
+ * - JSON specification endpoint at /api-docs/json
  * - Scalar UI with custom theming
  * - Automatic route discovery and documentation
  * - Request/response examples
@@ -50,14 +50,14 @@ import type { Config } from "../types/config.types";
  * });
  * 
  * // Documentation now available at:
- * // http://localhost:PORT/doc-api
- * // http://localhost:PORT/doc-api/json
+ * // http://localhost:PORT/api-docs
+ * // http://localhost:PORT/api-docs/json
  * ```
  */
 export function setupOpenAPI(app: Elysia, config: Config): void {
   app.use(
     openapi({
-      path: "/doc-api",
+      path: "/api-docs",
       documentation: {
         info: {
           title: config.title,
@@ -70,7 +70,7 @@ export function setupOpenAPI(app: Elysia, config: Config): void {
       scalar: {
         showToolbar: "never",
         theme: "mars",
-        url: "doc-api/json",
+        url: "api-docs/json",
         hideClientButton: true,
         customCss: `
           :root {

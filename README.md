@@ -31,7 +31,7 @@ bun install
 bun dev
 ```
 
-Your API will be running at `http://localhost:8080` with documentation at `http://localhost:8080/doc-api`
+Your API will be running at `http://localhost:8080` with documentation at `http://localhost:8080/api-docs`
 
 > **Note:** The `create-notelink` CLI tool is now in a separate repository: [create-notelink](https://github.com/canvas-tech-horizon/create-notelink)
 
@@ -47,6 +47,30 @@ The library includes several ready-to-use middleware examples:
 - **Logging Middleware** - Log all requests and responses
 - **Rate Limiting** - Limit requests per IP address
 - **Request ID** - Track requests with unique IDs
+
+## Examples
+
+The `examples/` directory contains sample applications demonstrating NoteLink usage:
+
+### Running Examples
+
+```bash
+# Install example dependencies
+bun run example:install
+
+# Run the basic example
+bun run example:basic
+```
+
+The basic example demonstrates:
+- Simple GET/POST endpoints
+- Path and query parameters
+- Request body validation
+- OpenAPI documentation generation
+
+Visit `http://localhost:3000/swagger` to see the auto-generated API documentation.
+
+For more details, see the [examples README](examples/README.md).
 
 ## Contributing
 

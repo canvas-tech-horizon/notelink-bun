@@ -1,6 +1,6 @@
 {
   "name": "notelink",
-  "version": "0.2.3",
+  "version": "1.0.0",
   "description": "API documentation library for Bun using ElysiaJS",
   "type": "module",
   "main": "dist/index.js",
@@ -23,7 +23,9 @@
     "test": "bun test",
     "prepublishOnly": "bun run build",
     "publish:local": "scripts\\publish.bat",
-    "publish:check": "npm pack --dry-run"
+    "publish:check": "npm pack --dry-run",
+    "example:basic": "cd examples && bun run --watch basic/index.ts",
+    "example:install": "cd examples && bun install"
   },
   "keywords": [
     "bun",
@@ -48,15 +50,15 @@
     "access": "public"
   },
   "peerDependencies": {
-    "elysia": "^1.4.13"
+    "elysia": "^1.4.25"
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "elysia": "^1.4.13",
+    "elysia": "^1.4.25",
     "typescript": "^5.3.3"
   },
   "dependencies": {
     "@elysiajs/jwt": "^1.4.0",
-    "@elysiajs/openapi": "^1.0.0"
+    "@elysiajs/openapi": "^1.4.14"
   }
 }

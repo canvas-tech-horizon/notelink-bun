@@ -1,7 +1,14 @@
 import { Elysia, type Context } from "elysia";
 import type { Config } from "../types/config.types";
 import type { DocumentedRouteInput } from "../types/route.types";
-import { setupJwtMiddleware, setupCorsMiddleware } from "../middleware";
+import { 
+  setupJwtMiddleware, 
+  setupCorsMiddleware,
+  setupSecurityHeaders,
+  setupRateLimit,
+  setupErrorHandler,
+  setupHealthCheck,
+} from "../middleware";
 import { setupOpenAPI } from "../utils";
 import { buildRouteSchema, wrapHandler } from "./route-handler";
 
@@ -45,9 +52,9 @@ export class ApiNote {
   /**
    * Creates a new ApiNote instance with the specified configuration
    * 
-   * Initializes the Elysia application, sets up middleware (JWT, CORS, custom),
-   * and configures OpenAPI documentation. The constructor automatically applies
-   * default values for host and basePath if not provided.
+   * Initializes the Elysia application, sets up middleware (JWT, CORS, Security Headers,
+   * Error Handling, etc.), and configures OpenAPI documentation. The constructor automatically
+   * applies default values for host and basePath if not provided.
    * 
    * @param config - Configuration object for the API
    * @param config.title - API title for documentation
@@ -56,7 +63,12 @@ export class ApiNote {
    * @param config.host - Host address (default: "localhost")
    * @param config.basePath - Base path for all routes (default: "/")
    * @param config.customMiddleware - Optional custom middleware array
-   * @param jwtSecret - Secret key for JWT operations (default: "default-secret-key")
+   * @param config.securityHeaders - Security headers configuration (default: enabled)
+   * @param config.rateLimit - Rate limiting configuration (default: disabled)
+   * @param config.errorHandler - Error handler configuration (default: enabled)
+   * @param config.healthCheck - Health check configuration (default: enabled)
+   * @param config.cors - CORS configuration (default: permissive)
+   * @param jwtSecret - Secret key for JWT operations (REQUIRED: provide your own secret)
    * 
    * @example
    * ```typescript
@@ -64,8 +76,11 @@ export class ApiNote {
    *   title: 'User Service',
    *   description: 'Microservice for user management',
    *   version: '2.1.0',
-   *   basePath: '/api/v2'
-   * });
+   *   basePath: '/api/v2',
+   *   securityHeaders: { hsts: true, csp: true },
+   *   rateLimit: { max: 100, windowMs: 60000 },
+   *   healthCheck: { path: '/health', includeDetails: true }
+   * }, process.env.JWT_SECRET!);
    * ```
    */
   constructor(config: Config, jwtSecret: string = "default-secret-key") {
@@ -79,30 +94,101 @@ export class ApiNote {
 
     this.setupMiddleware();
     setupOpenAPI(this.app, this.config);
+    this.setupDefaultRoutes();
   }
 
   /**
    * Sets up all middleware for the Elysia application
    * 
-   * This private method is called during construction to configure essential middleware
-   * in the following order:
-   * 1. JWT middleware for authentication token handling
-   * 2. CORS middleware for cross-origin requests
-   * 3. Custom middleware provided in the configuration
+   * This private method is called during construction to configure middleware
+   * in the following order (numbered list):
+   * (1) Error handler middleware (must be first to catch all errors)
+   * (2) Security headers middleware (HSTS, CSP, etc.)
+   * (3) Rate limiting middleware (DoS protection)
+   * (4) CORS middleware for cross-origin requests
+   * (5) JWT middleware for authentication token handling
+   * (6) Health check endpoints
+   * (7) Custom middleware provided in the configuration
+   * 
+   * Each middleware can be disabled or customized via the config object
    * 
    * @private
    * @returns {void}
    */
   private setupMiddleware() {
-    setupJwtMiddleware(this.app, this.jwtSecret);
-    setupCorsMiddleware(this.app);
+    // 1. Error handler - must be first to catch all errors
+    if (this.config.errorHandler !== false) {
+      setupErrorHandler(
+        this.app,
+        typeof this.config.errorHandler === 'object' 
+          ? this.config.errorHandler 
+          : {}
+      );
+    }
 
-    // Apply custom middleware if provided
+    // 2. Security headers - applies security headers to all responses
+    if (this.config.securityHeaders !== false) {
+      setupSecurityHeaders(
+        this.app,
+        typeof this.config.securityHeaders === 'object'
+          ? this.config.securityHeaders
+          : {}
+      );
+    }
+
+    // 3. Rate limiting - protects against DoS attacks
+    if (this.config.rateLimit) {
+      setupRateLimit(
+        this.app,
+        typeof this.config.rateLimit === 'object'
+          ? this.config.rateLimit
+          : {}
+      );
+    }
+
+    // 4. CORS - handles cross-origin requests
+    if (this.config.cors !== false) {
+      const corsOptions = typeof this.config.cors === 'object' 
+        ? this.config.cors 
+        : {};
+      setupCorsMiddleware(this.app, corsOptions);
+    }
+
+    // 5. JWT - authentication and authorization
+    setupJwtMiddleware(this.app, this.jwtSecret);
+
+    // 6. Health check endpoint
+    if (this.config.healthCheck !== false) {
+      setupHealthCheck(
+        this.app,
+        typeof this.config.healthCheck === 'object'
+          ? this.config.healthCheck
+          : {}
+      );
+    }
+
+    // 7. Apply custom middleware if provided
     if (this.config.customMiddleware && this.config.customMiddleware.length > 0) {
       for (const middleware of this.config.customMiddleware) {
         middleware(this.app);
       }
     }
+  }
+
+  /**
+   * Sets up default routes to handle common browser requests
+   * 
+   * This private method adds handlers for:
+   * - /favicon.ico - Returns 204 No Content to prevent NOT_FOUND errors
+   * 
+   * @private
+   * @returns {void}
+   */
+  private setupDefaultRoutes() {
+    // Handle favicon.ico to prevent NOT_FOUND errors from browsers
+    this.app.get('/favicon.ico', () => {
+      return new Response(null, { status: 204 });
+    }, { detail: { hide: true } });
   }
 
   /**
@@ -389,7 +475,15 @@ export class ApiNote {
     return new Promise((resolve, reject) => {
       try {
         this.app.onError(({ code, error, request }) => {
-          console.error('[onError]', code, request.method, request.url, error)
+          // Skip logging common browser requests that are expected to 404
+          const url = new URL(request.url);
+          const skipPaths = ['/favicon.ico', '/robots.txt'];
+          const shouldSkipLog = code === 'NOT_FOUND' && skipPaths.includes(url.pathname);
+          
+          if (!shouldSkipLog) {
+            console.error('[onError]', code, request.method, request.url, error);
+          }
+          
           const message = error instanceof Error ? error.message : String(error);
           return new Response(JSON.stringify({ code, message }), { status: 400 })
         });
@@ -422,7 +516,7 @@ export class ApiNote {
           }
 
           console.log('');
-          console.log('📚 API Documentation: /doc-api');
+          console.log('📚 API Documentation: /api-docs');
 
           resolve();
         });
